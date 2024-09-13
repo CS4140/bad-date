@@ -1,4 +1,5 @@
 # BadDate
+Daniel Whitney
 
 To start your Phoenix server:
 
