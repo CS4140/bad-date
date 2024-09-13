@@ -1,5 +1,6 @@
 # BadDate
 Daniel Whitney
+Aaron Sekplorm-Awadzi
 
 To start your Phoenix server:
 
