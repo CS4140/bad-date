@@ -22,3 +22,4 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
   * Ian Fraize
   * Daiel Whitney
   * Aaron Sekplorm-Awadzi
+  * Hailey Berrio
