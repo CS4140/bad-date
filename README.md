@@ -1,6 +1,5 @@
 # BadDate
-Daniel Whitney
-Aaron Sekplorm-Awadzi
+
 
 To start your Phoenix server:
 
@@ -21,3 +20,5 @@ Ready to run in production? Please [check our deployment guides](https://hexdocs
 
 ## Team members
   * Ian Fraize
+  * Daiel Whitney
+  * Aaron Sekplorm-Awadzi
