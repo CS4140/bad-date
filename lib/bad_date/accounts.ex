@@ -2,11 +2,59 @@ defmodule BadDate.Accounts do
   @moduledoc """
   The Accounts context.
   """
-
+ 
   import Ecto.Query, warn: false
   alias BadDate.Repo
+  alias BadDate.Accounts.{User, UserToken, UserNotifier, Block}
+  alias BadDate.Accounts.Block 
+ 
+  ## Blocking 
+  # List all users blocked by the current user
+  def list_blocked_users(user_id) do
+    Repo.all(from b in Block, where: b.blocker_id == ^user_id, join: u in User, on: u.id == b.blocked_id, select: u)
+  end
 
-  alias BadDate.Accounts.{User, UserToken, UserNotifier}
+  # Block a user by their email
+  def block_user_by_email(blocker_id, email) do
+    case Repo.get_by(User, email: email) do
+      nil ->
+        {:error, :not_found} # If user with the email is not found
+
+      user ->
+        block_user(blocker_id, user.id)
+    end
+  end
+  
+  # Block a user by ID
+  def block_user(blocker_id, blocked_id) do
+    %Block{}
+    |> Block.changeset(%{blocker_id: blocker_id, blocked_id: blocked_id})
+    |> Repo.insert()
+  end
+
+   # Unblock a user
+  def unblock_user(blocker_id, blocked_id) do
+    Repo.get_by(Block, blocker_id: blocker_id, blocked_id: blocked_id)
+    |> Repo.delete()
+  end
+
+  # Check if a user is blocked
+  def is_blocked?(blocker_id, blocked_id) do
+    Repo.exists?(from b in Block, where: b.blocker_id == ^blocker_id and b.blocked_id == ^blocked_id)
+  end
+  
+  # Changeset for the block user form
+  def change_block(%Block{} = block) do
+    Block.changeset(block, %{})
+  end
+ 
+ # Changeset for blocking a user by email
+  def change_block(%{} = params) do
+    Ecto.Changeset.cast(%Block{}, params, [:blocked_user_email])
+    |> Ecto.Changeset.validate_required([:blocked_user_email])
+    |> Ecto.Changeset.validate_format(:blocked_user_email, ~r/@/)
+  end
+
 
   ## Database getters
 
@@ -22,7 +70,7 @@ defmodule BadDate.Accounts do
       nil
 
   """
-  def get_user_by_email(email) when is_binary(email) do
+  def get_user_by_email(email) do
     Repo.get_by(User, email: email)
   end
 
@@ -351,3 +399,4 @@ defmodule BadDate.Accounts do
     end
   end
 end
+
