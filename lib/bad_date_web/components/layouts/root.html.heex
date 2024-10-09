@@ -17,6 +17,22 @@
         <li class="text-[0.8125rem] leading-6 text-zinc-900">
           <%= @current_user.email %>
         </li>
+           <li>
+          <.link
+            href={~p"/messages/new"}
+            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+          >
+            New Messages
+          </.link>
+        </li>
+        <li>
+          <.link
+            href={~p"/messages"}
+            class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
+          >
+            Messages
+          </.link>
+        </li>
         <li>
           <.link
             href={~p"/users/settings"}

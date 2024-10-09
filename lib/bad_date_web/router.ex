@@ -20,6 +20,14 @@ defmodule BadDateWeb.Router do
   scope "/", BadDateWeb do
     pipe_through :browser
 
+    #Messaging routes
+    resources "/messages", MessagingController, only: [:new, :create, :index]
+   
+    #Blocking routes
+    post "/block", BlockController, :block  # Route to block a user
+    delete "/block/:blocked_id", BlockController, :unblock  # Route to unblock a user
+    get "/blocked", BlockController, :index
+   
     get "/", PageController, :home
   end
 
