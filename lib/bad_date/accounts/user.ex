@@ -3,6 +3,14 @@ defmodule BadDate.Accounts.User do
   import Ecto.Changeset
 
   schema "users" do
+
+
+    field :location, :string
+    field :hobbies, :string
+    field :favorite_food, :string
+    field :description, :string
+
+
     field :email, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
@@ -11,6 +19,12 @@ defmodule BadDate.Accounts.User do
 
     timestamps(type: :utc_datetime)
   end
+
+   def changeset(user, attrs) do
+    user
+    |> cast(attrs, [:location, :hobbies, :favorite_food, :description, :email, :password, :hashed_password, :current_password])
+    |> validate_required([:location, :hobbies, :favorite_food, :description])
+  end  
 
   @doc """
   A user changeset for registration.
