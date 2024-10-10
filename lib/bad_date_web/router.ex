@@ -20,6 +20,15 @@ defmodule BadDateWeb.Router do
   scope "/", BadDateWeb do
     pipe_through :browser
 
+    get "/matches", MatchesController, :show
+
+    get "/profile/new", ProfileController, :new
+    get "/profile/:id/edit", ProfileController, :edit
+    put "/profile/:id", ProfileController, :update
+    get "/profile/:id", ProfileController, :show
+
+    post "/profile", ProfileController, :create
+    get "/profile", ProfileController, :index
     #Messaging routes
     resources "/messages", MessagingController, only: [:new, :create, :index]
    

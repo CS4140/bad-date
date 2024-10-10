@@ -3,10 +3,47 @@ defmodule BadDate.Accounts do
   The Accounts context.
   """
  
-  import Ecto.Query, warn: false
+  import Ecto.Query
   alias BadDate.Repo
   alias BadDate.Accounts.{User, UserToken, UserNotifier, Block}
   alias BadDate.Accounts.Block 
+
+   # Function to split comma-separated hobbies into a list for comparison
+  defp split_hobbies(hobbies) do
+    hobbies
+    |> String.split(",", trim: true)
+    |> Enum.map(&String.trim/1)
+  end
+
+  # Find the worst possible match for a user based on the worst match criteria
+  def find_worst_match(user) do
+    user_hobbies = split_hobbies(user.hobbies)
+
+    # Query to find the worst match
+    Repo.one(
+      from(u in User,
+        where: u.id != ^user.id,  # Exclude the current user
+        where: u.location != ^user.location,  # Opposite location
+        where: ^Enum.reduce(user_hobbies, dynamic(true), fn hobby, acc ->
+          dynamic([u], not like(u.hobbies, ^"%#{hobby}%") and ^acc)
+        end),  # Ensure no common hobbies
+        where: u.favorite_food != ^user.favorite_food,  # Different favorite foods
+        order_by: fragment("RANDOM()"),  # Randomize the worst match
+        limit: 1
+      )
+    )
+  end
+
+   def change_user_profile(user) do
+    User.changeset(user, %{})
+  end
+
+  def update_user_profile(user, attrs) do
+    user
+    |> User.changeset(attrs)
+    |> Repo.update()
+  end
+
  
   ## Blocking 
   # List all users blocked by the current user
