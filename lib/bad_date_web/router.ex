@@ -77,4 +77,11 @@ defmodule BadDateWeb.Router do
     get "/users/confirm/:token", UserConfirmationController, :edit
     post "/users/confirm/:token", UserConfirmationController, :update
   end
+
+  scope "/", BadDateWeb do
+    pipe_through [:browser]
+
+    patch "/users/pause_account", UserSettingsController, :pause_account
+    patch "/users/unpause_account", UserSettingsController, :unpause_account
+  end
 end

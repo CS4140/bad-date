@@ -350,4 +350,18 @@ defmodule BadDate.Accounts do
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
+
+  #Function to Pause an account
+  def pause_user(%User{} = user) do
+    user
+    |> User.paused_changeset(%{paused: true})
+    |> Repo.update()
+  end
+
+  #Function to unpause an account
+  def unpause_user(%User{} = user) do 
+    user
+    |> User.paused_changeset(%{paused: false})
+    |> Repo.update()
+  end
 end
