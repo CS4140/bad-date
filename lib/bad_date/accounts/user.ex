@@ -16,6 +16,7 @@ defmodule BadDate.Accounts.User do
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
+    field :paused, :boolean, default: false
 
     timestamps(type: :utc_datetime)
   end
@@ -49,6 +50,12 @@ defmodule BadDate.Accounts.User do
       submitting the form), this option can be set to `false`.
       Defaults to `true`.
   """
+  def paused_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:email, :password, :paused])
+    |> validate_required([:email, :paused])
+  end
+    
   def registration_changeset(user, attrs, opts \\ []) do
     user
     |> cast(attrs, [:email, :password])
